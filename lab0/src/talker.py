@@ -17,7 +17,7 @@ def talker():
     #keep publishing until a Ctrl-C is pressed
     i = 0
     while not rospy.is_shutdown():
-        hello_str = "Hello, I'm Saikiran Juttu %s" % i
+        hello_str = "Hello I'm Saikiran Juttu %s" % i
         rospy.loginfo(hello_str)
         pub.publish(hello_str)
         rate.sleep()

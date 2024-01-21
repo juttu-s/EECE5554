@@ -3,8 +3,9 @@ import rospy
 from std_msgs.msg import String
 
 def chatter_callback(message):
+    flipped_message = message.data[::-1]  # Reverse the message
     #get_caller_id(): Get fully resolved name of local node
-    rospy.loginfo(rospy.get_caller_id() + "Nice to meet you %s", message.data)
+    rospy.loginfo(rospy.get_caller_id() + " I heard %s", flipped_message)
     
 def listener():
 
