@@ -1,1 +1,2 @@
-I have installed Ubuntu and Git.
+I have installed Ubuntu.
+I have installed Git.
