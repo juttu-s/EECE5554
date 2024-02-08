@@ -55,21 +55,22 @@ if __name__=='__main__':
                         try: 
                      
                             if gps_puck_data_str[3]=='N':
-                                msg.Latitude = int(gps_puck_data_str[2][0:2]) + float(gps_puck_data_str[2][2:])/60
-                            else: msg.Latitude = -1 * (int(gps_puck_data_str[2][0:2]) + float(gps_puck_data_str[2][2:])/60)
+                                msg.latitude = int(gps_puck_data_str[2][0:2]) + float(gps_puck_data_str[2][2:])/60
+                            else: msg.latitude = -1 * (int(gps_puck_data_str[2][0:2]) + float(gps_puck_data_str[2][2:])/60)
 
                             if gps_puck_data_str[5]=='E':
-                                msg.Longitude = int(gps_puck_data_str[4][0:3]) + float(gps_puck_data_str[4][3:])/60
-                            else: msg.Longitude = -1 * (int(gps_puck_data_str[4][0:3]) + float(gps_puck_data_str[4][3:])/60)
+                                msg.longitude = int(gps_puck_data_str[4][0:3]) + float(gps_puck_data_str[4][3:])/60
+                            else: msg.longitude = -1 * (int(gps_puck_data_str[4][0:3]) + float(gps_puck_data_str[4][3:])/60)
 
                             msg.header.frame_id = 'GPS1_Frame'
-                            msg.Altitude = float(gps_puck_data_str[9])
-                            UTM_coordinate = utm.from_latlon(msg.Latitude, msg.Longitude)
+                            msg.altitude = float(gps_puck_data_str[9])
+                            utm_coordinate = utm.from_latlon(msg.latitude, msg.longitude)
                             msg.time= float(gps_puck_data_str[1])
-                            msg.UTM_easting = UTM_coordinate[0]
-                            msg.UTM_northing = UTM_coordinate[1]
-                            msg.Zone = UTM_coordinate[2]
-                            msg.letter = UTM_coordinate[3]
+                            msg.utm_easting = utm_coordinate[0]
+                            msg.utm_northing = utm_coordinate[1]
+                            msg.zone = utm_coordinate[2]
+                            msg.letter = utm_coordinate[3]
+                            msg.hdop = float(gps_puck_data_str[8])
                             # msg.status = int(gps_puck_data_str[7])
 
 
@@ -78,7 +79,7 @@ if __name__=='__main__':
                             utc_mint = (utc-(utc_hrs*10000))//100
                             utc_sec = (utc - (utc_hrs*10000) - (utc_mint*100))
                             utc_final_secs = (utc_hrs*3600 + utc_mint*60 + utc_sec)
-                            utc_final_nsecs = int((utc_final_secs * (10**7)) % (10**7))
+                            utc_final_nsecs = int((utc_final_secs * (10**9)) % (10**9))
                             print(utc_final_secs , utc_final_nsecs)
 
                             msg.header.stamp.secs = int(utc_final_secs)
@@ -90,12 +91,12 @@ if __name__=='__main__':
                         except Exception as e:
                                 print("Error Encountered" , e) 
                                 msg.header.frame_id = 'GPS1_Frame'
-                                msg.Altitude = 0.0
-                                # UTM_coordinate = utm.from_latlon(msg.Latitude, msg.Longitude)
+                                msg.altitude = 0.0
+                                # utm_coordinate = utm.from_latlon(msg.latitude, msg.longitude)
                                 msg.time= float(gps_puck_data_str[1])
-                                msg.UTM_easting = 0.0
-                                msg.UTM_northing = 0.0
-                                msg.Zone = 0.0
+                                msg.utm_easting = 0.0
+                                msg.utm_northing = 0.0
+                                msg.zone = 0.0
                                 msg.letter = 'Error'
 
                                 utc = float(gps_puck_data_str[1])
@@ -108,6 +109,7 @@ if __name__=='__main__':
                                 msg.header.stamp.secs = int(utc_final_secs)
                                 msg.header.stamp.nsecs = utc_final_nsecs
                                 print(utc_final_secs , utc_final_nsecs)
+                                msg.hdop = 0.0
                                 gps_pub.publish(msg)
                                 pass  
 
