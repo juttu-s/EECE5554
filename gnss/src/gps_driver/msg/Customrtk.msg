@@ -7,5 +7,5 @@ float64 utm_northing
 uint8 zone
 string letter
 float64 hdop
-string gpgga_read
-
+string gngga_read
+int32 fix_quality
